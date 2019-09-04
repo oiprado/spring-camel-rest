@@ -1,0 +1,27 @@
+server:
+  servlet:
+    context-path: /rest
+  port: 8080
+spring:
+  profiles:
+    active: developer # test server configuration
+  application: 
+    name: rest
+  jmx:
+    default-server: sso-server
+  logging:
+    file: logs/production_profile_app.log
+    pattern:
+        file: "%d %-5level [%thread] %logger{0} : %msg%n"
+    level:
+      org.springframework.web: DEBUG
+      guru.springframework.controllers: DEBUG
+      org.hibernate: DEBUG
+---
+spring:
+  profiles: developer # test server configuration
+check-user-scopes: true
+---
+spring:
+  profiles: test # test server configuration
+check-user-scopes: true

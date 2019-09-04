@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configures the Camel Context-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cxf="http://camel.apache.org/schema/cxf"
+       xmlns:amq="http://activemq.apache.org/schema/core"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+            http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+            http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
+            http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <camelContext xmlns="http://camel.apache.org/schema/spring" streamCache="true" trace="false">
+
+        <!--<propertyPlaceholder id="props" location="classpath:configuration.properties"/>-->
+
+        <!--        <dataFormats>
+            <json id="json" library="Gson" objectMapper="com.trinity.dev.gateway.dto.Account"/>
+        </dataFormats>-->
+
+        <restConfiguration component="restlet" enableCORS="true" bindingMode="auto" port="8000">
+            <corsHeaders key="Access-Control-Allow-Headers" value="Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"/>
+            <corsHeaders key="Access-Control-Allow-Origin" value="*"/>
+            <corsHeaders key="Access-Control-Allow-Methods" value="POST, PUT, DELETE, TRACE, OPTIONS, CONNECT, PATCH"/>
+            <corsHeaders key="Access-Control-Max-Age" value="3600"/>
+        </restConfiguration>
+
+        <rest enableCORS="true">
+            <post uri="/user-gateway/validate" consumes="multipart/form-data" produces="application/json" bindingMode="off">
+                <to uri="direct:validateImage"/>
+            </post>
+        </rest>
+
+        <route>
+            <from uri="direct:validateImage"/>
+            <process ref="debugProcessor"/> 
+            <to uri="direct:dummy.fileUpload"/>
+            <log message="Entro"/>
+        </route>
+
+        <route>
+            <from uri="direct:dummy.fileUpload"/>
+            <setHeader headerName="CamelHttpMethod">
+                <constant>{{rest.method}}</constant>
+            </setHeader>
+            <setHeader headerName="content-type">
+                <constant>{{rest.contentType}}</constant>
+            </setHeader>
+            <setHeader headerName="CamelHttpUri">
+                <simple>{{rest.uri}}</simple>
+            </setHeader>
+            <to uri="{{rest.uri}}"/>
+        </route>
+
+    </camelContext>
+
+</beans>

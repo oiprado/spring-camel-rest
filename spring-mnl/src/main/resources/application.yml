@@ -1,0 +1,75 @@
+server:
+  servlet:
+    context-path: /com.trinity.dev.user.gateway
+  port: 8010
+spring:
+  profiles:
+    active: localhost # test server configuration
+  application: 
+    name: com.trinity.dev.gateway
+  jmx:
+    default-domain: com.trinity.dev.gateway
+  main:
+    allow-bean-definition-overriding: true
+logging:
+  pattern:
+      file: "%d %-5level [%thread] %logger{0} : %msg%n"
+  level:
+    org.springframework.web: DEBUG
+    guru.springframework.controllers: DEBUG
+#    org.hibernate: DEBUG
+    org.springframework.security.oauth2: debug
+camel:
+  springboot::
+    shutdownTimeout: 1
+    health.indicator.enabled: true
+#    xmlRoutes: false
+    xmlRoutes: classpath:META-INF/camel/*.xml
+    jmxEnabled: false
+info.app.name: OAuth-SSO
+info.app.description: OAuth - Single Sign On platform
+info.app.version: 1.0.0
+---
+spring:
+  profiles: localhost
+rest:
+  ml:
+    method: POST
+    contentType: multipart/form-data
+    uri: http://localhost:8080/rest/dummy/uploadFile
+  risk:
+    method: POST
+    uri: https://risk.azurewebsites.net/Risk-backend/public/risk/saveMobile
+  
+---
+spring:
+  profiles: test
+rest:
+  user:
+    method: POST
+    contentType: application/json
+    uri: http://localhost:8080/com.trinity.dev.auth/public/account/create
+  agora:
+    method: POST
+    contentType: application/json
+    uri: http://localhost:8083/com.trinity.dev.agora/public/api/account/create
+  login:
+    method: POST
+    contentType: application/json
+    uri: http://localhost:8080/com.trinity.dev.auth/oauth/token?username=${header.username}&password=${header.password}
+    autorization: Basic c3ByaW5nLXNlY3VyaXR5LW9hdXRoMi1yZWFkLXdyaXRlLWNsaWVudDpzcHJpbmctc2VjdXJpdHktb2F1dGgyLXJlYWQtd3JpdGUtY2xpZW50LXBhc3N3b3JkMTIzNA==
+    clientId: spring-security-oauth2-read-write-client
+    clientSecret: spring-security-oauth2-read-write-client-password1234
+
+mail:
+  username: oiprado.freelance@gmail.com
+  password: Innov@2830528
+  registerUrl: http://localhost:4200/#/auth/register?referenceId=2
+  subject: Invitation to participate in surveys (ItSurvey)
+  from: oiprado.freelance@gmail.com
+  uri: smtps://smtp.gmail.com:465?username={{mail.username}}&password={{mail.password}}&mail.smtp.auth=true&mail.smtp.starttls.enable=true
+  contentType: text/html
+  smtp:
+    auth: true
+  starttls:
+    enable: true
