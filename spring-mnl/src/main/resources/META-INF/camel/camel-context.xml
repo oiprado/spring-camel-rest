@@ -27,6 +27,7 @@
                 <to uri="direct:validateImage"/>
             </post>
         </rest>
+        
 
         <route streamCache="false">
             <from uri="direct:validateImage"/>
