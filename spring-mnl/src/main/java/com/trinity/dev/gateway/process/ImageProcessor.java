@@ -10,20 +10,23 @@ import javax.activation.DataHandler;
 import javax.mail.internet.MimeBodyPart;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+
 /**
  *
  * @author oiprado
  */
-@Configuration
-public class DebugProcessor implements Processor {
+@Component
+public class ImageProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-
-        Object body = exchange.getIn().getBody();
         
-        System.out.println(body);       
+        InputStream is = exchange.getIn().getBody(InputStream.class);
+        MimeBodyPart mimeMessage = new MimeBodyPart(is);
+        DataHandler dh = mimeMessage.getDataHandler();
+        
+        exchange.getOut().setBody(dh.getInputStream());
     }
 
 }

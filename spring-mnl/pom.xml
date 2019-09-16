@@ -30,6 +30,12 @@
     <dependencies>
         
         <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
+        
+        <dependency>
             <groupId>org.restlet.jee</groupId>
             <artifactId>org.restlet.ext.spring</artifactId>
             <version>2.3.12</version>
@@ -66,6 +72,11 @@
         
         <dependency>
             <groupId>org.apache.camel</groupId>
+            <artifactId>camel-http</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.camel</groupId>
             <artifactId>camel-restlet</artifactId>
         </dependency>
         
@@ -74,7 +85,17 @@
             <artifactId>camel-servlet</artifactId>
         </dependency>
         
-<!--        <dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-mail</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-base64</artifactId>
+        </dependency>
+        
+        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-gson</artifactId>
         </dependency>
@@ -82,7 +103,17 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jackson</artifactId>
-        </dependency>-->
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-xstream</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-fastjson</artifactId>
+        </dependency>
         
     </dependencies>
     

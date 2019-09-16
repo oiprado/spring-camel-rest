@@ -4,7 +4,7 @@ server:
   port: 8010
 spring:
   profiles:
-    active: localhost # test server configuration
+    active: test # test server configuration
   application: 
     name: com.trinity.dev.gateway
   jmx:
@@ -35,31 +35,25 @@ spring:
 rest:
   ml:
     method: POST
-    contentType: multipart/form-data
+    contentType: application/json
     uri: http://localhost:8080/rest/dummy/uploadFile
   risk:
     method: POST
-    uri: https://risk.azurewebsites.net/Risk-backend/public/risk/saveMobile
+    contentType: application/json
+    uri: http://localhost:8080/rest/public/risk/saveML
   
 ---
 spring:
   profiles: test
 rest:
-  user:
+  ml:
     method: POST
     contentType: application/json
-    uri: http://localhost:8080/com.trinity.dev.auth/public/account/create
-  agora:
+    uri: https://us-central1-it-270-252419.cloudfunctions.net/classify-risk-it270
+  risk:
     method: POST
     contentType: application/json
-    uri: http://localhost:8083/com.trinity.dev.agora/public/api/account/create
-  login:
-    method: POST
-    contentType: application/json
-    uri: http://localhost:8080/com.trinity.dev.auth/oauth/token?username=${header.username}&password=${header.password}
-    autorization: Basic c3ByaW5nLXNlY3VyaXR5LW9hdXRoMi1yZWFkLXdyaXRlLWNsaWVudDpzcHJpbmctc2VjdXJpdHktb2F1dGgyLXJlYWQtd3JpdGUtY2xpZW50LXBhc3N3b3JkMTIzNA==
-    clientId: spring-security-oauth2-read-write-client
-    clientSecret: spring-security-oauth2-read-write-client-password1234
+    uri: http://localhost:8080/rest/public/risk/saveML
 
 mail:
   username: oiprado.freelance@gmail.com

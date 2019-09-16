@@ -1,0 +1,62 @@
+server:
+  servlet:
+    context-path: /com.it270.camel.queues
+  port: 8010
+spring:
+  profiles:
+    active: localhost # test server configuration
+  application: 
+    name: com.it270.camel.queues
+  jmx:
+    default-domain: com.it270.camel.queues
+  main:
+    allow-bean-definition-overriding: true
+logging:
+  pattern:
+      file: "%d %-5level [%thread] %logger{0} : %msg%n"
+  level:
+    org.springframework.web: DEBUG
+    guru.springframework.controllers: DEBUG
+#    org.hibernate: DEBUG
+    org.springframework.security.oauth2: debug
+camel:
+  springboot::
+    shutdownTimeout: 1
+    health.indicator.enabled: true
+#    xmlRoutes: false
+    xmlRoutes: classpath:META-INF/camel/*.xml
+    jmxEnabled: true
+---
+spring:
+  profiles: localhost
+mail:  
+  smtpServer: smtp.gmail.com
+  smtpServerPort: 465
+  uri: smtps://{{mail.smtpServer}}:{{mail.smtpServerPort}}?username={{mail.username}}&password={{mail.password}}&mail.smtp.auth=true&mail.smtp.starttls.enable=true
+  username: oiprado.freelance@gmail.com
+  password: Innov@2830528
+  subject: Info Riesgos
+  contentType: text/html
+  from: InfoRiesgos
+  smtp:
+    auth: true
+  starttls:
+    enable: true
+---
+spring:
+  profiles: production
+  
+mail:
+  smptServer: smtp-mail.outlook.com # smtp.gmail.com
+  smptServerPort: 587# 465
+  uri: smtps://{{mail.smptServer}}:{{mail.smptServerPort}}?username={{mail.username}}&password={{mail.password}}&mail.smtp.auth=true&mail.smtp.starttls.enable=true
+  username: info@riesgos360.com
+  password: Samuel15
+  subject: Invitation to participate in surveys (ItSurvey)
+  from: Info Riesgos
+  to: denunciasuriel@mininterior.gov.co
+  contentType: text/html
+  smtp:
+    auth: true
+  starttls:
+    enable: true

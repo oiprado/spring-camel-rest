@@ -1,0 +1,15 @@
+{
+   "type": "Tipo Riesgo",
+   "name": "Nombre riesgo",
+   "subject": "Delitos electorales 2019",
+   "app": "delitos-electorales",
+   "message": "Posible transhumancia",
+   "comments": "Comentarios",
+   "geolocation":  "3.448186,-76.527626",
+   "createdBy": "oiprado",
+   "createdDate": "Fecha",
+   "to": "oiprado@gmail.com",
+   "departament": "",
+   "city": "",
+   "address": ""
+}

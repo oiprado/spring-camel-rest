@@ -3,26 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.trinity.dev.dto;
+package com.trinity.dev.gateway.dto;
 
 /**
  *
  * @author oiprado
  */
-public class Risk {
-    
-    private String response;
+public class MLResponse {
     
 //    private boolean risk;
 //    private String category;
 //    private String image;
 //
-//    public Risk(boolean risk, String category, String image) {
-//        this.risk = risk;
-//        this.category = category;
-//        this.image = image;
-//    }
-//    
 //    public boolean isRisk() {
 //        return risk;
 //    }
@@ -46,11 +38,15 @@ public class Risk {
 //    public void setImage(String image) {
 //        this.image = image;
 //    }
+    private String response;
 
-    public Risk(String response) {
-        this.response = response;
+    public MLResponse() {
     }
 
+    public MLResponse(String response) {
+        this.response = response;
+    }
+    
     public String getResponse() {
         return response;
     }
@@ -58,7 +54,5 @@ public class Risk {
     public void setResponse(String response) {
         this.response = response;
     }
-
-    
     
 }
