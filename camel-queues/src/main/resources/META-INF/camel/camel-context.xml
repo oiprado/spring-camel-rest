@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configures the Camel Context-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:amq="http://activemq.apache.org/schema/core"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+            http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+            http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <bean id="jmsFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL">
+            <value>tcp://0.0.0.0:61616</value>
+        </property>
+    </bean>
+    
+    <bean id="debug" class="com.i7270.camel.queues.process.DebugProcessor"> </bean>
+    
+    <camelContext xmlns="http://camel.apache.org/schema/spring" streamCache="true" trace = "false">
+        
+        <!--<propertyPlaceholder id="props" location="classpath:configuration.properties"/>-->
+        
+        <route>
+            <from uri="jms:queue:cncl" />
+            <!--<log message="${body}"/>-->
+            <unmarshal>
+                <json library="Jackson" objectMapper="com.i7270.camel.queues.dto.Message"/>
+            </unmarshal>
+            <!--<process ref="debug"/>-->
+            <choice>
+                <when>
+                    <simple>${body['app']} == 'delitos-electorales'</simple>
+                    <setHeader headerName="CamelVelocityResourceUri">
+                        <simple>templates/message.vm</simple>
+                    </setHeader>
+                    <setHeader headerName="type">
+                        <simple>${body['type']}</simple>
+                    </setHeader>
+                    <setHeader headerName="subject">
+                        <simple>${body['subject']}</simple>
+                    </setHeader>
+                    <setHeader headerName="category">
+                        <simple>${body['category']}</simple>
+                    </setHeader>
+                    <setHeader headerName="app">
+                        <simple>${body['app']}</simple>
+                    </setHeader>
+                    <setHeader headerName="message">
+                        <simple>${body['message']}</simple>
+                    </setHeader>
+                    <setHeader headerName="detail">
+                        <simple>${body['detail']}</simple>
+                    </setHeader>
+                    <setHeader headerName="geolocation">
+                        <simple>${body['geolocation']}</simple>
+                    </setHeader>
+                    <setHeader headerName="to">
+                        <simple>${body['to']}</simple>
+                    </setHeader>
+                    <setHeader headerName="from">
+                        <simple>{{mail.from}}</simple>
+                    </setHeader>
+                    <setHeader headerName="password">
+                        <simple>${body['password']}</simple>
+                    </setHeader>
+                </when>
+            </choice>
+            <to uri="direct:sendMail"/>
+        </route>
+        
+        <route>
+            <from uri="direct:sendMail"/>
+            <to uri="velocity:dummy?encoding=UTF-8"/>
+            <setHeader headerName="mail.smtp.auth">
+                <constant>true</constant>
+            </setHeader>
+            <setHeader headerName="mail.smtp.starttls.enable">
+                <constant>true</constant>
+            </setHeader>
+            <setHeader headerName="contentType">
+                <constant>text/html</constant>
+            </setHeader>           
+            <log message="\n-{{mail.uri}}-"/>
+            <to uri="{{mail.uri}}"/>
+        </route>
+        
+    </camelContext>
+
+</beans>

@@ -1,0 +1,54 @@
+<html>
+    <head>
+         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>    
+        <style>
+            body {
+                font-family: 'Roboto', sans-serif;
+                /* font-size: 48px; */
+            }
+            .fl-photo-content img {
+                display: inline;
+                height: auto;
+                max-width: 100%;
+            }
+            .fl-module img {
+                max-width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <br/>
+        <!-- <div style="width: 500px"> -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <img class="img-thumbnail" src="http://riesgos360.com/wp-content/uploads/logo-360450x450px.png-2.png" alt="logo-360(450x450px).png-2" itemprop="image" height="759" width="2214" title="logo-360(450x450px).png-2">
+                        <div class="card-body">
+                            <h4 class="card-title">Apreciado ${headers.to}</h5>
+                            <p class="card-text">Se registró un reporte de un delito electoral (${headers.message}).</p>
+                            <h4>Detalle:</h4>
+                            <p class = "card-text">${headers.detail}</p>
+                            <h4>Se ubíca en las coordenadas:</h4>  
+                            <p class="card-text">https://www.google.com/maps/@${headers.geolocation},14z?hl=es</p>
+                            <font size="2">
+                            Este e-mail se ha generado por un sistema automático. Por favor, no responda a este e-mail directamente. Si tiene alguna duda o necesitas ayuda contacte con nosotros. Si no desea recibir más alertas como esta, por favor, haga click en Baja de alertas.
+                            </font>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+        </div>
+        <!-- </div> -->
+        <br/>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>

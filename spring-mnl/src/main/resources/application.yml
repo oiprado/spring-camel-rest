@@ -1,0 +1,69 @@
+server:
+  servlet:
+    context-path: /com.trinity.dev.user.gateway
+  port: 8010
+spring:
+  profiles:
+    active: test # test server configuration
+  application: 
+    name: com.trinity.dev.gateway
+  jmx:
+    default-domain: com.trinity.dev.gateway
+  main:
+    allow-bean-definition-overriding: true
+logging:
+  pattern:
+      file: "%d %-5level [%thread] %logger{0} : %msg%n"
+  level:
+    org.springframework.web: DEBUG
+    guru.springframework.controllers: DEBUG
+#    org.hibernate: DEBUG
+    org.springframework.security.oauth2: debug
+camel:
+  springboot::
+    shutdownTimeout: 1
+    health.indicator.enabled: true
+#    xmlRoutes: false
+    xmlRoutes: classpath:META-INF/camel/*.xml
+    jmxEnabled: false
+info.app.name: OAuth-SSO
+info.app.description: OAuth - Single Sign On platform
+info.app.version: 1.0.0
+---
+spring:
+  profiles: localhost
+rest:
+  ml:
+    method: POST
+    contentType: application/json
+    uri: http://localhost:8080/rest/dummy/uploadFile
+  risk:
+    method: POST
+    contentType: application/json
+    uri: http://localhost:8080/rest/public/risk/saveML
+  
+---
+spring:
+  profiles: test
+rest:
+  ml:
+    method: POST
+    contentType: application/json
+    uri: https://us-central1-it-270-252419.cloudfunctions.net/classify-risk-it270
+  risk:
+    method: POST
+    contentType: application/json
+    uri: http://localhost:8080/rest/public/risk/saveML
+
+mail:
+  username: user
+  password: password
+  registerUrl: http://localhost:4200/#/auth/register?referenceId=2
+  subject: Invitation to participate in surveys (ItSurvey)
+  from: user@gmail.com
+  uri: smtps://smtp.gmail.com:465?username={{mail.username}}&password={{mail.password}}&mail.smtp.auth=true&mail.smtp.starttls.enable=true
+  contentType: text/html
+  smtp:
+    auth: true
+  starttls:
+    enable: true

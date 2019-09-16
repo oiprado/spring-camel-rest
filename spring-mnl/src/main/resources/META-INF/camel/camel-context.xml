@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configures the Camel Context-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cxf="http://camel.apache.org/schema/cxf"
+       xmlns:amq="http://activemq.apache.org/schema/core"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+            http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+            http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
+            http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    
+     <bean id="RestletComponent" class="org.restlet.Component" />
+
+    <bean id="RestletComponentService" class="org.apache.camel.component.restlet.RestletComponent">
+        <constructor-arg index="0">
+            <ref bean="RestletComponent" />
+        </constructor-arg>
+    </bean>
+    
+    <camelContext xmlns="http://camel.apache.org/schema/spring" trace="false">
+
+        <restConfiguration component="restlet" enableCORS="true" bindingMode="auto">
+            <corsHeaders key="Access-Control-Allow-Headers" value="Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"/>
+            <corsHeaders key="Access-Control-Allow-Origin" value="*"/>
+            <corsHeaders key="Access-Control-Allow-Methods" value="POST, PUT, DELETE, TRACE, OPTIONS, CONNECT, PATCH"/>
+            <corsHeaders key="Access-Control-Max-Age" value="3600"/>
+        </restConfiguration>
+
+        <rest enableCORS="true">
+            <post uri="/user-gateway/validate" consumes="multipart/form-data" produces="application/json" bindingMode="off">
+                <to uri="direct:validateImage"/>
+            </post>
+        </rest>
+        
+
+        <route streamCache="false">
+            <from uri="direct:validateImage"/>
+            <process ref="imageProcessor"/>            
+            <marshal>
+                <base64/>
+            </marshal>
+            <!--<process ref="debugProcessor"/>-->
+            <convertBodyTo type="java.lang.String"/>
+            <to uri="direct:risk.validateImage"/>
+            <to uri="direct:risk.processResponse"/>
+        </route>
+        
+        <route id = "ROUTE-ProcessResponse" streamCache="true">
+            <from uri="direct:risk.processResponse"/>
+            <unmarshal>
+                <json library="Gson" unmarshalTypeName = "com.trinity.dev.gateway.dto.MLResponse" />
+            </unmarshal>
+            <process ref="validateRequestProcessor"/>
+            <choice>
+                <when> 
+                    <simple>${body.response} == "dry_grass"</simple>
+                    <to uri="direct:risk.save"/>
+                    <setBody>
+                        <constant>{"isRisk": "true", type: "incendio_forestal"}</constant>
+                    </setBody>
+                </when>
+                <otherwise>
+                    <setBody>
+                        <constant>{"response":"Ok"}</constant>
+                    </setBody>
+                </otherwise>
+            </choice>
+        </route>
+        
+        <route id = "ROUTE-ValidateImage">
+            <from uri = "direct:risk.validateImage"/>
+            <setHeader headerName="CamelHttpMethod">
+                <constant>{{rest.ml.method}}</constant>
+            </setHeader>
+            <setHeader headerName="content-type">
+                <constant>{{rest.ml.contentType}}</constant>
+            </setHeader>
+            <setHeader headerName="CamelHttpUri">
+                <constant>{{rest.ml.uri}}</constant>
+            </setHeader>
+            <process ref="bindHeadersProcessor"/>
+            <marshal>
+                <json library="Jackson"/>
+            </marshal>
+            <to uri="{{rest.ml.uri}}"/>
+        </route>
+        
+        <route id="ROUTE-Save-Risk">
+            <from uri="direct:risk.save"/>
+            <setHeader headerName="CamelHttpMethod">
+                <constant>{{rest.risk.method}}</constant>
+            </setHeader>
+            <setHeader headerName="content-type">
+                <constant>{{rest.risk.contentType}}</constant>
+            </setHeader>
+            <setHeader headerName="CamelHttpUri">
+                <simple>{{rest.risk.uri}}</simple>
+            </setHeader>
+            <process ref="bindRiskDetailProcessor"/>
+            <marshal>
+                <json library="Gson"/>
+            </marshal>
+            <to uri="{{rest.risk.uri}}"/>
+        </route>
+
+    </camelContext>
+
+</beans>

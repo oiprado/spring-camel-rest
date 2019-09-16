@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+</head>
+
+<body style="background-color: #f6f6f6;width: 100% !important;height: 100%;line-height: 1.6;">
+    <br/>
+
+    <div class="card mb-3 mx-auto" style="max-width: 540px;">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <img class="card-img" src="http://riesgos360.com/wp-content/uploads/logo-360450x450px.png-2.png" alt="logo-360(450x450px).png-2" title="logo-360(450x450px).png-2">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">Usuario</h5>
+              <p class="card-text"></p>
+              <h5 class="card-title">Coordenadas</h5>
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    
+                    <div style="width: 100%;clear: both;color: #999;padding: 20px;">
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="font-size: 12px;text-align: center;padding: 0 0 20px;">
+                                    <div th:text="${copyrightText}">Copyright &copy; 2019, Derechos reservados</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 12px;text-align: center;padding: 0 0 20px;">
+                                    Por favor, no responda a este mensaje, ya que solo realiza funciones de distribución
+                                    de correo.
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </td>
+            <td></td>
+        </tr>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+
+</html>
