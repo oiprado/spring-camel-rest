@@ -13,9 +13,17 @@
             http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
     
+     <bean id="RestletComponent" class="org.restlet.Component" />
+
+    <bean id="RestletComponentService" class="org.apache.camel.component.restlet.RestletComponent">
+        <constructor-arg index="0">
+            <ref bean="RestletComponent" />
+        </constructor-arg>
+    </bean>
+    
     <camelContext xmlns="http://camel.apache.org/schema/spring" trace="false">
 
-        <restConfiguration component="restlet" enableCORS="true" bindingMode="auto" port="8000">
+        <restConfiguration component="restlet" enableCORS="true" bindingMode="auto">
             <corsHeaders key="Access-Control-Allow-Headers" value="Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"/>
             <corsHeaders key="Access-Control-Allow-Origin" value="*"/>
             <corsHeaders key="Access-Control-Allow-Methods" value="POST, PUT, DELETE, TRACE, OPTIONS, CONNECT, PATCH"/>
