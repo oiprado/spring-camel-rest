@@ -5,11 +5,13 @@
  */
 package com.trinity.dev.gateway.dto;
 
+import java.io.Serializable;
+
 /**
  *
  * @author oiprado
  */
-public class MLResponse {
+public class MLResponse implements Serializable {
     
 //    private boolean risk;
 //    private String category;
@@ -54,5 +56,11 @@ public class MLResponse {
     public void setResponse(String response) {
         this.response = response;
     }
+
+    @Override
+    public String toString() {
+        return "{" + "\"response\"= \"" + response + "\"}";
+    }
+    
     
 }

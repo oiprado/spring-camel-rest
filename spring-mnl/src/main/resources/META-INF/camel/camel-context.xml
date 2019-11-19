@@ -13,7 +13,7 @@
             http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
     
-     <bean id="RestletComponent" class="org.restlet.Component" />
+    <bean id="RestletComponent" class="org.restlet.Component" />
 
     <bean id="RestletComponentService" class="org.apache.camel.component.restlet.RestletComponent">
         <constructor-arg index="0">
@@ -21,91 +21,49 @@
         </constructor-arg>
     </bean>
     
-    <camelContext xmlns="http://camel.apache.org/schema/spring" trace="false">
+    <camelContext xmlns="http://camel.apache.org/schema/spring">
 
-        <restConfiguration component="restlet" enableCORS="true" bindingMode="auto">
+        <restConfiguration component="jetty" enableCORS="true" port="8000">
             <corsHeaders key="Access-Control-Allow-Headers" value="Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"/>
             <corsHeaders key="Access-Control-Allow-Origin" value="*"/>
             <corsHeaders key="Access-Control-Allow-Methods" value="POST, PUT, DELETE, TRACE, OPTIONS, CONNECT, PATCH"/>
-            <corsHeaders key="Access-Control-Max-Age" value="3600"/>
+            <!--<corsHeaders key="Access-Control-Max-Age" value="3600"/>-->
         </restConfiguration>
 
         <rest enableCORS="true">
-            <post uri="/user-gateway/validate" consumes="multipart/form-data" produces="application/json" bindingMode="off">
-                <to uri="direct:validateImage"/>
+            <post uri="/validate" bindingMode="auto" type="com.trinity.dev.gateway.dto.Image" enableCORS="true">
+                <route trace="false" streamCache="true">
+                    <doTry>
+                        <setHeader headerName="CamelHttpMethod">
+                            <constant>POST</constant>
+                        </setHeader>
+                        <setHeader headerName="Content-Type">
+                            <constant>application/json</constant>
+                        </setHeader>
+                        <setHeader headerName="CamelHttpUri">
+                            <constant>https://us-central1-risk-tensor-flow-258320.cloudfunctions.net/risk-tf</constant>
+                        </setHeader>
+                        <marshal>
+                            <json library="Jackson" disableFeatures="FAIL_ON_EMPTY_BEANS"/>
+                        </marshal>
+                        <convertBodyTo type="java.lang.String"/>
+                        <to uri="{{rest.ml.uri}}"/>
+                        <unmarshal>
+                            <json library="Jackson" unmarshalTypeName="com.trinity.dev.gateway.dto.MLResponse"/>
+                        </unmarshal>
+                        <log message="Out: ${body}"/>
+                        <process ref="responseProcessor"/>
+                        <unmarshal>
+                            <json library="Jackson"/>
+                        </unmarshal>
+                        <doCatch>
+                            <exception>java.lang.Exception</exception>
+                            <log message="Error: ${exception}"/>
+                        </doCatch>
+                    </doTry>
+                </route>
             </post>
         </rest>
-        
-
-        <route streamCache="false">
-            <from uri="direct:validateImage"/>
-            <process ref="imageProcessor"/>            
-            <marshal>
-                <base64/>
-            </marshal>
-            <!--<process ref="debugProcessor"/>-->
-            <convertBodyTo type="java.lang.String"/>
-            <to uri="direct:risk.validateImage"/>
-            <to uri="direct:risk.processResponse"/>
-        </route>
-        
-        <route id = "ROUTE-ProcessResponse" streamCache="true">
-            <from uri="direct:risk.processResponse"/>
-            <unmarshal>
-                <json library="Gson" unmarshalTypeName = "com.trinity.dev.gateway.dto.MLResponse" />
-            </unmarshal>
-            <process ref="validateRequestProcessor"/>
-            <choice>
-                <when> 
-                    <simple>${body.response} == "dry_grass"</simple>
-                    <to uri="direct:risk.save"/>
-                    <setBody>
-                        <constant>{"isRisk": "true", type: "incendio_forestal"}</constant>
-                    </setBody>
-                </when>
-                <otherwise>
-                    <setBody>
-                        <constant>{"response":"Ok"}</constant>
-                    </setBody>
-                </otherwise>
-            </choice>
-        </route>
-        
-        <route id = "ROUTE-ValidateImage">
-            <from uri = "direct:risk.validateImage"/>
-            <setHeader headerName="CamelHttpMethod">
-                <constant>{{rest.ml.method}}</constant>
-            </setHeader>
-            <setHeader headerName="content-type">
-                <constant>{{rest.ml.contentType}}</constant>
-            </setHeader>
-            <setHeader headerName="CamelHttpUri">
-                <constant>{{rest.ml.uri}}</constant>
-            </setHeader>
-            <process ref="bindHeadersProcessor"/>
-            <marshal>
-                <json library="Jackson"/>
-            </marshal>
-            <to uri="{{rest.ml.uri}}"/>
-        </route>
-        
-        <route id="ROUTE-Save-Risk">
-            <from uri="direct:risk.save"/>
-            <setHeader headerName="CamelHttpMethod">
-                <constant>{{rest.risk.method}}</constant>
-            </setHeader>
-            <setHeader headerName="content-type">
-                <constant>{{rest.risk.contentType}}</constant>
-            </setHeader>
-            <setHeader headerName="CamelHttpUri">
-                <simple>{{rest.risk.uri}}</simple>
-            </setHeader>
-            <process ref="bindRiskDetailProcessor"/>
-            <marshal>
-                <json library="Gson"/>
-            </marshal>
-            <to uri="{{rest.risk.uri}}"/>
-        </route>
 
     </camelContext>
 

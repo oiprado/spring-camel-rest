@@ -36,34 +36,10 @@ rest:
   ml:
     method: POST
     contentType: application/json
-    uri: http://localhost:8080/rest/dummy/uploadFile
-  risk:
-    method: POST
-    contentType: application/json
-    uri: http://localhost:8080/rest/public/risk/saveML
-  
+    uri: https://us-central1-risk-tensor-flow-258320.cloudfunctions.net/risk-tf
 ---
 spring:
   profiles: test
 rest:
   ml:
-    method: POST
-    contentType: application/json
-    uri: https://us-central1-it-270-252419.cloudfunctions.net/classify-risk-it270
-  risk:
-    method: POST
-    contentType: application/json
-    uri: http://localhost:8080/rest/public/risk/saveML
-
-mail:
-  username: oiprado.freelance@gmail.com
-  password: Innov@2830528
-  registerUrl: http://localhost:4200/#/auth/register?referenceId=2
-  subject: Invitation to participate in surveys (ItSurvey)
-  from: oiprado.freelance@gmail.com
-  uri: smtps://smtp.gmail.com:465?username={{mail.username}}&password={{mail.password}}&mail.smtp.auth=true&mail.smtp.starttls.enable=true
-  contentType: text/html
-  smtp:
-    auth: true
-  starttls:
-    enable: true
+    uri: https://us-central1-risk-tensor-flow-258320.cloudfunctions.net/risk-tf
