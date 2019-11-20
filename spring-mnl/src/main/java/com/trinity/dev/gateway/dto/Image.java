@@ -5,13 +5,11 @@
  */
 package com.trinity.dev.gateway.dto;
 
-import java.io.Serializable;
-
 /**
  *
  * @author oiprado
  */
-public class Image implements Serializable{
+public class Image {
     
     private String image;
 

@@ -23,7 +23,7 @@
     
     <camelContext xmlns="http://camel.apache.org/schema/spring">
 
-        <restConfiguration component="jetty" enableCORS="true" port="8000">
+        <restConfiguration component="restlet" enableCORS="true" >
             <corsHeaders key="Access-Control-Allow-Headers" value="Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"/>
             <corsHeaders key="Access-Control-Allow-Origin" value="*"/>
             <corsHeaders key="Access-Control-Allow-Methods" value="POST, PUT, DELETE, TRACE, OPTIONS, CONNECT, PATCH"/>
@@ -56,6 +56,15 @@
                         <unmarshal>
                             <json library="Jackson"/>
                         </unmarshal>
+                        
+                        <!--                        <transform>
+                            <simple>${body}</simple>
+                        </transform>-->
+                        <!--<process ref="debugProcessor"/>-->
+                        <!--<convertBodyTo type="java.lang.String"/>-->
+                        <!--                        <setBody>
+                            <simple>${body}</simple>
+                        </setBody>-->
                         <doCatch>
                             <exception>java.lang.Exception</exception>
                             <log message="Error: ${exception}"/>

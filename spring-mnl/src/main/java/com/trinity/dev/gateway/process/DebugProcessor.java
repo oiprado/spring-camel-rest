@@ -5,14 +5,18 @@
  */
 package com.trinity.dev.gateway.process;
 
+
+import java.io.InputStream;
+import javax.activation.DataHandler;
+import javax.mail.internet.MimeBodyPart;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 /**
  *
  * @author oiprado
  */
-@Component
+@Configuration
 public class DebugProcessor implements Processor {
 
     @Override
@@ -20,11 +24,7 @@ public class DebugProcessor implements Processor {
 
         Object body = exchange.getIn().getBody();
         
-//        System.out.println(body);       
-        
-        exchange.getOut().setHeaders(exchange.getIn().getHeaders());
-        exchange.getOut().setBody(body);
-        
+        System.out.println(body);
     }
 
 }

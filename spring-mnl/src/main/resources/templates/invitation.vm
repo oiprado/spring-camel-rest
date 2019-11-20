@@ -1,0 +1,38 @@
+<html>
+    <head>
+         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>    
+        <style>
+            body {
+                font-family: 'Roboto', sans-serif;
+                font-size: 48px;
+            }
+        </style>
+    </head>
+    <body>
+	<br/>
+	<center>
+            <div class="card" style="width: 18rem; text-align: center; ">
+                <img class="card-img-top" src="http://www.yumana.edu.co/sites/default/files/encuesta_0.png" style = "height: 180px; width: 180px;" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Hola $headers.mail.</h5>
+                    <p class="card-text">
+                        El usuario <b>$headers.user_name</b> te ha invitado a participar en un grupo de trabajo para desarrollo de encuestas.
+                    </p>
+                    <form action = "$headers.register_url">
+                        <button class="btn btn-primary">Aceptas?</button>
+                    </form>
+                    <font size="1">
+                    Este e-mail se ha generado por un sistema automático. Por favor, no responda a este e-mail directamente. Si tiene alguna duda o necesitas ayuda contacte con nosotros. Si no desea recibir más alertas como esta, por favor, haga click en Baja de alertas.
+                    </font>
+              </div>
+            </div>
+        </center>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    </body>
+</html>
